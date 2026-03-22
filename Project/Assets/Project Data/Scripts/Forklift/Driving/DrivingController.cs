@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AdaptivePerformance.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -34,7 +35,6 @@ public class DrivingController : MonoBehaviour
     [Header("Ground Checking Variables")]
     [SerializeField] Transform groundCheckTransform;
     [SerializeField] bool isGrounded;
-    [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
 
@@ -53,6 +53,7 @@ public class DrivingController : MonoBehaviour
     GameObject currentTrailLeft;
     GameObject currentTrailRight; 
     [SerializeField]GameObject driftTrailsContainer;
+    bool manuallyStoppedDrift = false;
 
     [Header("Boost Variables")]
     [SerializeField] float boostMultiplier = 2f;
@@ -68,6 +69,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject boostParticlesBR;
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
+    [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
 
     float sign = 1f;
 
@@ -123,9 +125,7 @@ public class DrivingController : MonoBehaviour
 
     [Header("Camera Boost")]
     [SerializeField] float fovChangeMultiplier = 1.2f;
-
     [SerializeField] GameObject playerCamera = null;
-
     [SerializeField] private GameObject castRay;
 
     private Rigidbody rb;
@@ -188,6 +188,8 @@ public class DrivingController : MonoBehaviour
             GetComponent<BoxCollider>().enabled = true;
         }
 
+        rb.angularVelocity = Vector3.zero;
+
         groundCheck();  
         updateMove();
         updateRotate();
@@ -234,7 +236,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit; 
         float rayLength = groundDistance + wheelRadius;
-        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask);
+        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
         Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
     }
 
@@ -464,7 +466,14 @@ public class DrivingController : MonoBehaviour
 
     public void OnDrift()
     {
-        drifting = !drifting;
+        if(manuallyStoppedDrift)
+        {
+            manuallyStoppedDrift = false;
+        }
+        else
+        {
+            drifting = !drifting;
+        }
 
         if(drifting)
         {
@@ -645,12 +654,15 @@ public class DrivingController : MonoBehaviour
                     break;
                 case 1:
                     boostMultiplier = Tier1Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.x);
                     break;
                 case 2:
                     boostMultiplier = Tier2Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.y);
                     break;
                 case 3:
                     boostMultiplier = Tier3Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.z);
                     break;
             }
 
@@ -684,7 +696,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask))
+        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength))
         {
             Gizmos.color = Color.green;
         }
@@ -698,13 +710,19 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
+
 		// Shake camera when colliding with crates
 		if (collision.transform.CompareTag("Float"))
 		{
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
         }
+        //if collision is not with a crate then stop drifting
+        else if(drifting)
+        {
+            manuallyStopDrifting();
+        }
 
-        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
 
@@ -715,11 +733,11 @@ public class DrivingController : MonoBehaviour
 
         forceDirection = normalDir;
 
-        //reflect the direction around the impulse of the collision
-        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
-        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+        addedForce =
+            forceDirection * bouncingForceMultiplier * rigidBody.mass * 
+            -Mathf.Sign(Vector3.Dot(normalDir, (collision.gameObject.transform.position - transform.position).normalized));
 
-        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+        
 
         movement.movingValue = 0;
 
@@ -747,5 +765,25 @@ public class DrivingController : MonoBehaviour
         {
             castRay.GetComponent<CratePickUp>().DropHeld();
         }
+    }
+
+    private void multiplyCrateScore(float multiplier)
+    {
+        castRay.GetComponent<CratePickUp>().multiplyCrateScore(multiplier);
+    }
+
+    private void manuallyStopDrifting()
+    {
+        manuallyStoppedDrift = true;
+
+        drifting = false;
+        boostReady = false;
+        driftingEffects.Emit(false);
+        driftingEffects.Stop();
+        boostTimer = 0f;
+        boostTier = 0;
+
+        currentTrailRight.transform.parent = driftTrailsContainer.transform;
+        currentTrailLeft.transform.parent = driftTrailsContainer.transform;
     }
 }
