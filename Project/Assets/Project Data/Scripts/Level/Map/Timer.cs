@@ -56,7 +56,6 @@ public class Timer : MonoBehaviour
             if (repeat)
             {
                 Restart();
-
             }
             else
             {

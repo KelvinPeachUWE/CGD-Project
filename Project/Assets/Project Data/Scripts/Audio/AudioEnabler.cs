@@ -5,7 +5,6 @@ public class AudioEnabler : MonoBehaviour
 {
     [SerializeField] List<AudioSource> audio_source;
     [SerializeField] List<string> names;
-    
     public void Enable(string name = "")
     {
         if (name == "") 

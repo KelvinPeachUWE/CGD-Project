@@ -95,8 +95,10 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Spawns a crate and set its data based on its requirement. Instantiate within spawnedObjects
-    void SpawnCrate(in Transform point, in SpawnRequirements requirement) 
-        => requirement.instances[point] = CrateObject.Instantiate(cratePrefab, point, requirement.tag, requirement.damageBehaviour, requirement.crateScore);
+    void SpawnCrate(in Transform point, in SpawnRequirements requirement)
+    {
+        requirement.instances[point] = CrateObject.Instantiate(cratePrefab, point, requirement.tag, requirement.damageBehaviour, requirement.crateScore);
+    }
 
     // Randomise spawnable transforms (Fisher-Yates shuffle I found on stack overflow)
     // Partition list from 0 to pointer to end -> Select random element -> swap with pointer element -> decrement pointer
