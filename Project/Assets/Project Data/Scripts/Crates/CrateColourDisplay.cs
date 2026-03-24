@@ -7,15 +7,13 @@ using static CrateExtensions;
 [RequireComponent(typeof(MeshRenderer))]
 public class CrateColourDisplay : MonoBehaviour
 {
-    Material material;
+    [SerializeField] Renderer _renderer;
     float alpha;
 
     private void Awake()
     {
-        material = GetComponent<Renderer>().material;
-
         // Should apply alpha of whats currently on the material
-        alpha = material.GetColor("_BaseColor").a;
+        alpha = _renderer.material.GetColor("_BaseColor").a;
     }
 
     // Changes the colour of this object's material.
@@ -24,6 +22,6 @@ public class CrateColourDisplay : MonoBehaviour
     {
         var color = quota.requiredTag.GetColourFromTag();
         color.a = alpha;
-        material.SetColor("_BaseColor", color);
+        _renderer.material.SetColor("_BaseColor", color);
     }
 }

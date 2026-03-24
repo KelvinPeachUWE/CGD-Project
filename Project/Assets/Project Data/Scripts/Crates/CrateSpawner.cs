@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Scripting;
 using static CrateExtensions;
 
 /// <summary>
@@ -38,13 +39,11 @@ public class CrateSpawner : MonoBehaviour
         // Initialise the instances map on each spawn requirement
         for (int i = 0; i < spawnRequirements.Count; i++) 
         {
-            var dict = new Dictionary<Transform, ICollectable>();
+            spawnRequirements[i].instances = new();
             foreach (var t in spawnRequirements[i].parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
             {
-                dict.Add(t, null);
+                spawnRequirements[i].instances.Add(t, null);
             }
-
-            spawnRequirements[i].instances = dict;
         }
     }
 
@@ -75,17 +74,22 @@ public class CrateSpawner : MonoBehaviour
     // Attempts to spawn a crate at each point if its mapped GameObject is null
     void TrySpawnCrates()
     {
+        int j, k;
+
+        List<Transform> allPoints = new();
+        List<Transform> validPoints = new();
+
         // Loop through each requirement and spawn in as many crates are needed
         foreach (var req in spawnRequirements)
         {
             // Get a shuffled list of the spawn transforms which do not have any objects
-            List<Transform> allPoints = req.instances.Keys.ToList();
-            List<Transform> validPoints = allPoints.FindAll(item => (Object)req.instances[item] == null);
+            allPoints = req.instances.Keys.ToList();
+            validPoints = allPoints.FindAll(item => (Object)req.instances[item] == null);
             ShuffleList(validPoints);
 
             // Spawn more crates until we've reached the max spawn count or spawned at all valid points
-            int j = 0,
-                k = Mathf.Clamp(req.spawnCount,0 , validPoints.Count);
+            j = 0;
+            k = Mathf.Clamp(req.spawnCount,0 , validPoints.Count);
             for (int i = req.Spawned; i < k;  i++)
             {
                 SpawnCrate(validPoints[j], req);
@@ -104,12 +108,12 @@ public class CrateSpawner : MonoBehaviour
     // Partition list from 0 to pointer to end -> Select random element -> swap with pointer element -> decrement pointer
     static void ShuffleList<T>(List<T> list)
     {
-        var rnd = new System.Random();
         int n = list.Count;
+        int k;
         while (n > 1)
         {
             n--;
-            int k = rnd.Next(0, n + 1);
+            k = new System.Random().Next(0, n + 1);
             (list[n], list[k]) = (list[k], list[n]);
         }
     }

@@ -1848,6 +1848,14 @@ PrefabInstance:
       propertyPath: duration
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7142957843213478375, guid: a66a47a91cf3e754898bb014ddcbcc43, type: 3}
+      propertyPath: renderer
+      value: 
+      objectReference: {fileID: 1171182895}
+    - target: {fileID: 7142957843213478375, guid: a66a47a91cf3e754898bb014ddcbcc43, type: 3}
+      propertyPath: _renderer
+      value: 
+      objectReference: {fileID: 1171182895}
     - target: {fileID: 7213067967333849847, guid: a66a47a91cf3e754898bb014ddcbcc43, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
@@ -2518,7 +2526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: debugPlayerCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: playerJoined.m_PersistentCalls.m_Calls.Array.size
@@ -6489,6 +6497,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92dfb2ad4c7dc284ca9087f8177ffee0, type: 3}
+--- !u!23 &1171182895 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5924337645498668210, guid: a66a47a91cf3e754898bb014ddcbcc43, type: 3}
+  m_PrefabInstance: {fileID: 486330378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1171486807 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5493748164532524465, guid: 61f86b09fe16f9741b0fc9a123a910ac, type: 3}
