@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +7,19 @@ public class LoadScene : MonoBehaviour
 {
 	[Header("Settings")]
 	[SerializeField] private string sceneToLoad;
-	
+
+	[SerializeField] bool preLoadScene = false;
+	AsyncOperation scenePreLoad;
+
+    private void Start()
+    {
+		if (!preLoadScene) return;
+
+		scenePreLoad = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+		scenePreLoad.allowSceneActivation = false;
+		scenePreLoad.priority = 19;
+    }
+
     public void Load()
     {
 		if (sceneToLoad == string.Empty)
@@ -26,7 +38,11 @@ public class LoadScene : MonoBehaviour
 			Debug.LogWarning("Tried to load scene without a name.");
 			return;
 		}
-		
+
+		if(preLoadScene) scenePreLoad.allowSceneActivation = true;
+
+		while (!scenePreLoad.isDone) { /*wait...*/ }
+
         SceneManager.LoadScene(sceneName);
     }
 	

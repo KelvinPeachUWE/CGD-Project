@@ -49,7 +49,7 @@ public class LevelPanel : MonoBehaviour
 			Debug.LogWarning("Tried to load scene without a name in Level Panel");
 			return;	
 		}
-		
+
         SceneManager.LoadScene(level.GetSceneName());
     }
 }
