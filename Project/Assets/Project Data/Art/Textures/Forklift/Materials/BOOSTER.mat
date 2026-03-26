@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2229605376676654299
+--- !u!114 &-5974460786052790111
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 1 WALL_WINDOW copy
+  m_Name: BOOSTER
   m_Shader: {fileID: -6465566751694194690, guid: 4831501151f67a64b8040c3b7ec04235, type: 3}
   m_Parent: {fileID: 2100000, guid: 6ecbf8dea07641b4993226e6ebcfbd7c, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 166f1ddeec16d5f4da05be8138bf3041, type: 3}
+        m_Texture: {fileID: 2800000, guid: 457a53a5c15e10542b9c120d09ff05e3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
