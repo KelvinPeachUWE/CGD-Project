@@ -13,6 +13,7 @@ public class MusicManager : MonoBehaviour
 	
 	private void Start()
 	{
+		audioSrc.loop = true;
 		// Prevent being destroyed between scenes
 		DontDestroyOnLoad(gameObject); 
 		

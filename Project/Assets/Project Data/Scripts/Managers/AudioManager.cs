@@ -6,15 +6,17 @@ public class AudioManager : MonoBehaviour
 	[Header("Cache")]
 	[Tooltip("Reference to AudioMixer in assets")]
 	[SerializeField] private AudioMixer audioMixer;
-	
-	private void Start()
+
+    private static AudioManager instance = new();
+
+    private void Start()
 	{
 		// Subscribe to events
 		SaveManager.onLoaded.AddListener(OnLoaded);
 		
 		// Survive scene changes
-		DontDestroyOnLoad(gameObject);
-	}
+		//ntDestroyOnLoad(gameObject()
+    }
 
 	// Save file has finished loading, so it's safe to fill in values
 	private void OnLoaded()
