@@ -213,6 +213,10 @@ public class CratePickUp : MonoBehaviour
             return;
 
         var Angle = CalculateAngleOfPickup(pickupList[0]);
+        if (Angle == PickUpDirection.None)
+        {
+            return;
+        }
 
         pickupList[0].GetComponent<Rigidbody>().useGravity = false;
         heldObjects.Add(pickupList[0]);
@@ -234,6 +238,7 @@ public class CratePickUp : MonoBehaviour
             }
         }
 
+
         var heldCount = heldObjects.Count - (heldObjects.Count == 0 ? 0 : 1);
 
         if (heldObjects.Count == 0)
@@ -244,6 +249,7 @@ public class CratePickUp : MonoBehaviour
             return; 
         }
 
+
         if (heldObjects[heldCount].TryGetComponent<PhysicsPickup>(out var pickup))
         {
             pickup.OnDropped.Invoke();
@@ -253,13 +259,11 @@ public class CratePickUp : MonoBehaviour
 
         if (heldObjects[0].tag == "Player")
         {
-            Debug.LogWarning("Dropping player");
             holdingForklift = false;
             heldObjects[0].GetComponent<BoxCollider>().enabled = true;
 
             onDropped?.Invoke();
         }
-
 
         heldObjects[heldCount].GetComponent<Rigidbody>().isKinematic = false;
 

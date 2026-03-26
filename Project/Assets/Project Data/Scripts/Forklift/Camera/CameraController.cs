@@ -72,9 +72,4 @@ public class CameraController : MonoBehaviour
     {
         followingObject = pos;
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(currentlyLookingAt.position, 0.3f);
-    }
 }

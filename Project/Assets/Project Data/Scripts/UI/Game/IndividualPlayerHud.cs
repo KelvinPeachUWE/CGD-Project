@@ -75,20 +75,20 @@ public class IndividualPlayerHud : MonoBehaviour
 	
 	private void UpdateCrates()
 	{
-		if (!cratePickUp || cratePickUp.heldObjects.Count == 0 || cratePickUp.heldObjects[0].tag == "Player")
-			return;
-		
 		// Hide all crate icons
 		foreach (var crate in crates)
 		{
 			crate.SetActive(false);
 		}
-		
-		// Show enough crate icons to match held ones
-		for(int i = 0; i < cratePickUp.heldObjectsCount; i++)
+
+		if (!cratePickUp || cratePickUp.heldObjects.Count == 0 || cratePickUp.heldObjects[0].tag == "Player")
+			return;	
+
+        // Show enough crate icons to match held ones
+        for (int i = 0; i < cratePickUp.heldObjects.Count; i++)
 		{
-			// Show crate square
-			crates[i].SetActive(true);
+            // Show crate square
+            crates[i].SetActive(true);
 		   
 			// Show crate score value
 			cratesText[i].text = cratePickUp.heldObjects[i].GetComponent<ICollectable>().Score.ToString();

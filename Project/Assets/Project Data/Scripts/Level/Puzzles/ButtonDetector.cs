@@ -1,11 +1,11 @@
-using Newtonsoft.Json.Bson;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ButtonDetector : MonoBehaviour
 {
     [Header("Events")]
-    [SerializeField] UnityEvent pressEvent;
+    [SerializeField] List<UnityEvent> pressEvent = new();
     [SerializeField] UnityEvent releaseEvent;
 
     [Header("Button data")]
@@ -17,7 +17,7 @@ public class ButtonDetector : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            pressEvent?.Invoke();
+            foreach(var ev in pressEvent) ev?.Invoke();
             button.transform.position = pressedTransform.position;
             GetComponent<AudioEnabler>().Enable("Button");
         }
@@ -36,7 +36,7 @@ public class ButtonDetector : MonoBehaviour
     { 
         if (collider.gameObject.tag == "Player")
         {
-            pressEvent?.Invoke();
+            foreach(var ev in pressEvent) ev?.Invoke();
             button.transform.position = pressedTransform.position;
             GetComponent<AudioEnabler>().Enable("Button");
         }
