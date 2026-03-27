@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ClockBoundries
+  m_Name: PlatformHaz
   m_Shader: {fileID: -6465566751694194690, guid: 4831501151f67a64b8040c3b7ec04235, type: 3}
-  m_Parent: {fileID: 2100000, guid: 91a61c1b34793e04ba5e789e468c407d, type: 2}
+  m_Parent: {fileID: 2100000, guid: 6ecbf8dea07641b4993226e6ebcfbd7c, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,13 +23,17 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Texture2D:
+        m_Texture: {fileID: 2800000, guid: 11f24163685b0da49a26e859a678af29, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats: []
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &8922461158264792786
+--- !u!114 &3850682989832992416
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
